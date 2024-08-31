@@ -7,13 +7,20 @@ class Block {
   index: number;
   nonce: number;
   timestamp: number;
-  constructor(index: number, data: any, previoushHash: string) {
+
+  constructor(
+    index: number,
+    data: any,
+    previoushHash: string,
+    difficulty: number
+  ) {
     this.data = data;
     this.nonce = 0;
     this.index = index;
     this.previousHash = previoushHash;
-    this.hash = this.calculateHash();
     this.timestamp = new Date().getTime();
+    this.hash = this.calculateHash();
+    this.mine(difficulty);
   }
 
   calculateHash() {

@@ -5,44 +5,71 @@ import Blockchain from "@/lib/blockchain";
 import { useEffect, useState } from "react";
 export default function Home() {
   const [blockchain, setBlockchain] = useState<Blockchain | null>(null);
-  const [difficulty, setDifficulty] = useState(1);
+  const [difficulty, setDifficulty] = useState(3);
   useEffect(() => {
-    const blockchain = new Blockchain(difficulty);
+    const genesisBlock = new Block(0, "Genesis Block", "0", difficulty);
+    const blockchain = new Blockchain(genesisBlock);
+
     for (let i = 1; i < 4; i++) {
-      const newBlock = new Block(i, "", blockchain.chain[i - 1].hash);
-      newBlock.mine(difficulty);
+      const previousBlock = blockchain.chain[i - 1];
+      const newBlock = new Block(i, "", previousBlock.hash, difficulty);
       blockchain.addBlock(newBlock);
     }
-    // console.log(blockchain.isValid());
+
     setBlockchain(blockchain);
-  }, []);
+  }, [difficulty]);
 
   const updateBlockData = (index: number, newData: string) => {
-    const updatedBlockchain = { ...blockchain };
+    if (!blockchain) return;
 
-    if (updatedBlockchain && updatedBlockchain.chain) {
-      // update the data of the block at the given index
-      updatedBlockchain.chain[index].data = newData;
-      const newHash = updatedBlockchain.chain[index].calculateHash();
-      updatedBlockchain.chain[index].hash = newHash;
+    const updatedBlockchain = new Blockchain(blockchain.chain[0]);
+    updatedBlockchain.chain = [...blockchain.chain];
 
-      // update the previousHash and hash of the next block
-      for (let i = index + 1; i < updatedBlockchain.chain?.length; i++) {
-        updatedBlockchain.chain[i].previousHash =
-          updatedBlockchain.chain[i - 1].hash;
-        updatedBlockchain.chain[i].hash =
-          updatedBlockchain.chain[i].calculateHash();
-      }
+    // Update the block data and hash
+    updatedBlockchain.chain[index].data = newData;
+    updatedBlockchain.chain[index].hash =
+      updatedBlockchain.chain[index].calculateHash();
 
-      setBlockchain(updatedBlockchain);
+    // Update subsequent blocks
+    updateSubsequentBlocks(updatedBlockchain, index);
+
+    setBlockchain(updatedBlockchain);
+  };
+
+  const updateSubsequentBlocks = (
+    blockchain: Blockchain,
+    startIndex: number
+  ) => {
+    for (let i = startIndex + 1; i < blockchain.chain.length; i++) {
+      const previousBlock = blockchain.chain[i - 1];
+      const currentBlock = blockchain.chain[i];
+
+      currentBlock.previousHash = previousBlock.hash;
+      currentBlock.hash = currentBlock.calculateHash();
     }
   };
 
-  const isBlockValid = (block: Block, previousBlock: Block) => {
-    if (block.previousHash !== previousBlock.hash) return false;
-    if (block.hash !== block.calculateHash()) return false;
-    if (!block.hash.startsWith("0".repeat(difficulty))) return false;
-    return true;
+  const isBlockValid = (block: Block, previousBlock: Block): boolean => {
+    return (
+      block.previousHash === previousBlock.hash &&
+      block.hash === block.calculateHash() &&
+      block.hash.startsWith("0".repeat(difficulty))
+    );
+  };
+
+  const miningTheBlock = (block: Block) => {
+    if (!blockchain) return;
+
+    const updatedBlockchain = new Blockchain(blockchain.chain[0]);
+    updatedBlockchain.chain = [...blockchain.chain];
+
+    // Mine the block and update its hash
+    updatedBlockchain?.chain[block.index].mine(difficulty);
+
+    // Update subsequent blocks
+    updateSubsequentBlocks(updatedBlockchain, block.index);
+
+    setBlockchain(updatedBlockchain);
   };
 
   return (
@@ -59,6 +86,7 @@ export default function Home() {
               block={block}
               isValid={isValid}
               onDataChange={updateBlockData}
+              mineBlock={() => miningTheBlock(block)}
             />
           );
         })}

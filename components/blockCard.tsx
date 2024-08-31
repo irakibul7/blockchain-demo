@@ -3,9 +3,15 @@ type BlockCardProps = {
   block: Block;
   isValid: boolean;
   onDataChange: (index: number, newData: string) => void;
+  mineBlock: () => void;
 };
 
-const BlockCard = ({ block, isValid, onDataChange }: BlockCardProps) => {
+const BlockCard = ({
+  block,
+  isValid,
+  onDataChange,
+  mineBlock,
+}: BlockCardProps) => {
   return (
     <div
       className={`border p-5 ${
@@ -17,6 +23,7 @@ const BlockCard = ({ block, isValid, onDataChange }: BlockCardProps) => {
       <label className="block mt-4">DATA</label>
       <input
         type="text"
+        className="w-full border border-gray-300 rounded-lg p-2 text-gray-800"
         value={block.data}
         onChange={(e) => onDataChange(block.index, e.target.value)}
         placeholder="Enter block data"
@@ -52,6 +59,9 @@ const BlockCard = ({ block, isValid, onDataChange }: BlockCardProps) => {
           value={new Date(block.timestamp).toLocaleString()}
           readOnly
         />
+      </div>
+      <div>
+        <button onClick={() => mineBlock()}>Mine</button>
       </div>
     </div>
   );
