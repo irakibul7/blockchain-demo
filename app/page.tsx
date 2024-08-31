@@ -1,5 +1,15 @@
 "use client";
 import BlockCard from "@/components/blockCard";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import Block from "@/lib/block";
 import Blockchain from "@/lib/blockchain";
 import { useEffect, useState } from "react";
@@ -73,8 +83,9 @@ export default function Home() {
   };
 
   return (
-    <div className="p-5">
-      <h1>Blockchain</h1>
+    <div className="container relative mx-auto flex min-h-screen w-full max-w-3xl flex-col py-4 space-y-8">
+      <h1 className="text-2xl font-bold text-center mb-8">Blockchain Demo</h1>
+
       {blockchain &&
         blockchain.chain.map((block, index) => {
           const isValid =
@@ -90,6 +101,20 @@ export default function Home() {
             />
           );
         })}
+      <Card className="w-full max-w-md mx-auto">
+        <CardHeader>
+          <CardTitle>Add New Block</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <Label htmlFor="new-block-data">Input Data:</Label>
+            <Input id="new-block-data" placeholder="Enter data for new block" />
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button className="w-full">Add Block</Button>
+        </CardFooter>
+      </Card>
     </div>
   );
 }
