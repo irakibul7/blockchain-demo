@@ -12,10 +12,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Block from "@/lib/block";
 import Blockchain from "@/lib/blockchain";
+import { ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 export default function Home() {
   const [blockchain, setBlockchain] = useState<Blockchain | null>(null);
   const [difficulty, setDifficulty] = useState(3);
+  const [newBlockData, setNewBlockData] = useState("");
   useEffect(() => {
     const genesisBlock = new Block(0, "Genesis Block", "0", difficulty);
     const blockchain = new Blockchain(genesisBlock);
@@ -82,37 +84,62 @@ export default function Home() {
     setBlockchain(updatedBlockchain);
   };
 
-  return (
-    <div className="container relative mx-auto flex min-h-screen w-full max-w-3xl flex-col py-4 space-y-8">
-      <h1 className="text-2xl font-bold text-center mb-8">Blockchain Demo</h1>
+  const addNewBlock = () => {
+    if (!blockchain) return;
 
-      {blockchain &&
-        blockchain.chain.map((block, index) => {
-          const isValid =
-            index === 0 || isBlockValid(block, blockchain?.chain[index - 1]);
-          console.log("isvalid", isValid);
-          return (
-            <BlockCard
-              key={index}
-              block={block}
-              isValid={isValid}
-              onDataChange={updateBlockData}
-              mineBlock={() => miningTheBlock(block)}
-            />
-          );
-        })}
-      <Card className="w-full max-w-md mx-auto">
+    const newBlock = new Block(
+      blockchain.chain.length,
+      newBlockData,
+      blockchain.chain[blockchain.chain.length - 1].hash,
+      difficulty
+    );
+    const updatedBlockchain = new Blockchain(blockchain.chain[0]);
+    updatedBlockchain.chain = [...blockchain.chain, newBlock];
+
+    setBlockchain(updatedBlockchain);
+    setNewBlockData("");
+  };
+
+  return (
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <h1 className="text-4xl font-bold text-center mb-8">Blockchain Demo</h1>
+
+      <div className="space-y-6">
+        {blockchain &&
+          blockchain.chain.map((block, index) => {
+            const isValid =
+              index === 0 || isBlockValid(block, blockchain?.chain[index - 1]);
+
+            return (
+              <BlockCard
+                key={index}
+                block={block}
+                isValid={isValid}
+                onDataChange={updateBlockData}
+                mineBlock={() => miningTheBlock(block)}
+              />
+            );
+          })}
+      </div>
+      <Card className="mt-8">
         <CardHeader>
           <CardTitle>Add New Block</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
             <Label htmlFor="new-block-data">Input Data:</Label>
-            <Input id="new-block-data" placeholder="Enter data for new block" />
+            <Input
+              id="new-block-data"
+              placeholder="Enter data for new block"
+              value={newBlockData}
+              onChange={(e) => setNewBlockData(e.target.value)}
+            />
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full">Add Block</Button>
+          <Button onClick={addNewBlock} className="w-full">
+            Add Block <ChevronRight className="ml-2" />
+          </Button>
         </CardFooter>
       </Card>
     </div>
