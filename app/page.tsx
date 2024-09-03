@@ -104,7 +104,7 @@ export default function Home() {
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <h1 className="text-4xl font-bold text-center mb-8">Blockchain Demo</h1>
 
-      <div className="space-y-6">
+      <div>
         {blockchain &&
           blockchain.chain.map((block, index) => {
             const isValid =

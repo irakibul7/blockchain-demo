@@ -15,7 +15,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@radix-ui/react-tooltip";
-import { ChevronDown, Clock, Hash, Key, RefreshCcw } from "lucide-react";
+import { Clock, Hash, Key, RefreshCcw, Unlink, Unlink2 } from "lucide-react";
 import { useState } from "react";
 
 type BlockCardProps = {
@@ -43,19 +43,29 @@ const BlockCard = ({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <CardHeader className="pb-2">
+        <CardHeader className="pb-2 flex items-center relative">
           <CardTitle className="text-2xl font-bold text-primary">
             Block #{block.index + 1}
           </CardTitle>
+          {block.index === 0 && (
+            <span className="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300 absolute top-0 right-0">
+              Genesis
+            </span>
+          )}
         </CardHeader>
+
         <CardContent className="space-y-2">
           <div className="grid grid-cols-1 gap-2">
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="flex items-center gap-2">
+                <Label className="flex items-center gap-2">
                   <Key className="w-4 h-4 text-muted-foreground" />
-                  <span className="font-medium">Nonce:</span> {block.nonce}
-                </div>
+                  <span className="font-medium">Nonce:</span>
+                  <span className="bg-gray-100 text-gray-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">
+                    {" "}
+                    {block.nonce}
+                  </span>
+                </Label>
               </TooltipTrigger>
               <TooltipContent>
                 <p>Number used once for mining</p>
@@ -63,13 +73,13 @@ const BlockCard = ({
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="flex items-center gap-2">
+                <Label className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-muted-foreground" />
                   <span className="font-medium">Timestamp:</span>
                   <span className="truncate">
-                    {new Date(block.timestamp).toLocaleString()}
+                    {new Date(block.timestamp).toUTCString()}
                   </span>
-                </div>
+                </Label>
               </TooltipTrigger>
               <TooltipContent>
                 <p>Time when the block was created</p>
@@ -145,9 +155,21 @@ const BlockCard = ({
           </Button>
         </CardFooter>
         {block.index > 0 && (
-          <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-            <div className="bg-background p-1 rounded-full shadow">
-              <ChevronDown className="w-6 h-6 text-primary" />
+          <div className="absolute -top-9 left-1/2 transform -translate-x-1/2">
+            <div className="bg-background me-2 px-1 py-0.5 rounded-md">
+              {/* <ChevronDown className="w-6 h-6 text-primary" />
+              <Unlink className="w-6 h-6 text-primary" /> */}
+              {isValid ? (
+                <>
+                  <Unlink2 className="w-4 h-4 text-primary rotate-90" />
+                  <Unlink2 className="w-4 h-4 text-primary rotate-90" />
+                </>
+              ) : (
+                <>
+                  <Unlink className="w-4 h-4 text-primary -rotate-45" />
+                  <Unlink className="w-4 h-4 text-primary -rotate-45" />
+                </>
+              )}
             </div>
           </div>
         )}
