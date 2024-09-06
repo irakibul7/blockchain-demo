@@ -1,5 +1,6 @@
 "use client";
 import BlockCard from "@/components/blockCard";
+import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,6 +19,10 @@ export default function Home() {
   const [blockchain, setBlockchain] = useState<Blockchain | null>(null);
   const [difficulty, setDifficulty] = useState(3);
   const [newBlockData, setNewBlockData] = useState("");
+  const [loadingBlocks, setLoadingBlocks] = useState<{
+    [key: number]: boolean;
+  }>({});
+
   useEffect(() => {
     const genesisBlock = new Block(0, "Genesis Block", "0", difficulty);
     const blockchain = new Blockchain(genesisBlock);
@@ -71,17 +76,19 @@ export default function Home() {
 
   const miningTheBlock = (block: Block) => {
     if (!blockchain) return;
+    setLoadingBlocks((prev) => ({ ...prev, [block.index]: true }));
 
-    const updatedBlockchain = new Blockchain(blockchain.chain[0]);
-    updatedBlockchain.chain = [...blockchain.chain];
+    setTimeout(() => {
+      const updatedBlockchain = new Blockchain(blockchain.chain[0]);
+      updatedBlockchain.chain = [...blockchain.chain];
 
-    // Mine the block and update its hash
-    updatedBlockchain?.chain[block.index].mine(difficulty);
-
-    // Update subsequent blocks
-    updateSubsequentBlocks(updatedBlockchain, block.index);
-
-    setBlockchain(updatedBlockchain);
+      // Mine the block and update its hash
+      updatedBlockchain?.chain[block.index].mine(difficulty);
+      // Update subsequent blocks
+      updateSubsequentBlocks(updatedBlockchain, block.index);
+      setBlockchain(updatedBlockchain);
+      setLoadingBlocks((prev) => ({ ...prev, [block.index]: false }));
+    }, 2000);
   };
 
   const addNewBlock = () => {
@@ -115,6 +122,7 @@ export default function Home() {
                 key={index}
                 block={block}
                 isValid={isValid}
+                isLoading={loadingBlocks[block.index] || false}
                 onDataChange={updateBlockData}
                 mineBlock={() => miningTheBlock(block)}
               />
@@ -142,6 +150,7 @@ export default function Home() {
           </Button>
         </CardFooter>
       </Card>
+      <Footer />
     </div>
   );
 }

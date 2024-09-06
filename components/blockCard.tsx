@@ -15,7 +15,16 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@radix-ui/react-tooltip";
-import { Clock, Hash, Key, RefreshCcw, Unlink, Unlink2 } from "lucide-react";
+import {
+  Clock,
+  Hash,
+  Key,
+  Pickaxe,
+  RefreshCcw,
+  RefreshCw,
+  Unlink,
+  Unlink2,
+} from "lucide-react";
 import { useState } from "react";
 
 type BlockCardProps = {
@@ -23,6 +32,7 @@ type BlockCardProps = {
   isValid: boolean;
   onDataChange: (index: number, newData: string) => void;
   mineBlock: () => void;
+  isLoading: boolean;
 };
 
 const BlockCard = ({
@@ -30,6 +40,7 @@ const BlockCard = ({
   isValid,
   onDataChange,
   mineBlock,
+  isLoading,
 }: BlockCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   return (
@@ -145,13 +156,18 @@ const BlockCard = ({
             </Tooltip>
           </div>
         </CardContent>
-        <CardFooter>
+        <CardFooter className="flex items-center justify-center">
           <Button
-            className="w-full"
+            className="rounded-full bg-slate-700"
             onClick={mineBlock}
-            variant={isValid ? "outline" : "default"}
+            disabled={isValid}
           >
-            {isValid ? "Re-Mine Block" : "Mine Block"}
+            Mine Block{" "}
+            {isLoading ? (
+              <RefreshCw className="ml-1 h-5 w-5 animate-spin" />
+            ) : (
+              <Pickaxe className="ml-1 h-5 w-5" />
+            )}
           </Button>
         </CardFooter>
         {block.index > 0 && (
