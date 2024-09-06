@@ -1,14 +1,34 @@
 import "@/app/globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { siteConfig } from "@/config/site";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Blockchain Demo",
-  description:
-    "This website illustrates how blockchain works. It allows you to create blocks, mine them, and see how they are linked together. It also shows how tampering with a block affects the chain.",
+  title: {
+    default: siteConfig.name,
+    template: `${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  metadataBase: new URL("https://blockchain-demo.therakibul.me/"),
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+  },
+  twitter: {
+    title: siteConfig.name,
+    description: siteConfig.description,
+    card: "summary_large_image",
+  },
+  openGraph: {
+    title: siteConfig.name,
+    description: siteConfig.description,
+    type: "website",
+    url: "https://blockchian-demo.therakibul.me",
+    images: "/opengraph-image.png",
+  },
 };
 
 type RootLayoutProps = {
@@ -23,7 +43,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <body>
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="light"
             enableSystem
             disableTransitionOnChange
           >
