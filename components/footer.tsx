@@ -2,7 +2,7 @@ import { GithubIcon, LinkedinIcon } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-primary text-primary-foreground py-4 mt-8">
+    <footer className="py-4 mt-8 border-t">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="text-sm mb-4 md:mb-0">
