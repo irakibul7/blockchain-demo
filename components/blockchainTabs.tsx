@@ -73,11 +73,21 @@ const BlockchainTabs = () => {
           onScroll={checkForArrows}
         >
           <TabsList className="inline-flex w-max border-b border-b-transparent p-1">
-            <TabsTrigger value="blockchain">Blockchain</TabsTrigger>
-            <TabsTrigger value="p2p">P2P Network</TabsTrigger>
-            <TabsTrigger value="mining">Mining</TabsTrigger>
-            <TabsTrigger value="pow">Proof of Work</TabsTrigger>
-            <TabsTrigger value="51attack">51% Attack</TabsTrigger>
+            <TabsTrigger value="blockchain" className="px-2">
+              Blockchain
+            </TabsTrigger>
+            <TabsTrigger value="p2p" className="px-2">
+              P2P Network
+            </TabsTrigger>
+            <TabsTrigger value="mining" className="px-2">
+              Mining
+            </TabsTrigger>
+            <TabsTrigger value="pow" className="px-2">
+              Proof of Work
+            </TabsTrigger>
+            <TabsTrigger value="51attack" className="px-2">
+              51% Attack
+            </TabsTrigger>
           </TabsList>
         </div>
         <TabsContent value="blockchain">
