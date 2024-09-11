@@ -66,26 +66,20 @@ const BlockchainTabs = () => {
         </Button>
       )}
 
-      <Tabs defaultValue="blockchain" className="mb-8">
+      <Tabs defaultValue="blockchain" className="mb-8 w-full">
         <div
           ref={tabsRef}
-          className="overflow-x-auto scrollbar-hide"
+          className="overflow-x-auto "
           onScroll={checkForArrows}
         >
-          <TabsList className="inline-flex w-max border-b border-b-transparent p-1">
-            <TabsTrigger value="blockchain" className="px-2">
-              Blockchain
-            </TabsTrigger>
-            <TabsTrigger value="p2p" className="px-2">
-              P2P Network
-            </TabsTrigger>
-            <TabsTrigger value="mining" className="px-2">
-              Mining
-            </TabsTrigger>
-            <TabsTrigger value="pow" className="px-2">
+          <TabsList className="inline-flex w-max border-b border-b-transparent p-1 ">
+            <TabsTrigger value="blockchain">Blockchain</TabsTrigger>
+            <TabsTrigger value="p2p">P2P Network</TabsTrigger>
+            <TabsTrigger value="mining">Mining</TabsTrigger>
+            {/* <TabsTrigger value="pow">
               Proof of Work
-            </TabsTrigger>
-            {/* <TabsTrigger value="51attack" className="px-2">
+            </TabsTrigger> */}
+            {/* <TabsTrigger value="51attack">
               51% Attack
             </TabsTrigger> */}
           </TabsList>
