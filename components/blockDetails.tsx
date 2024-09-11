@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Tooltip,
   TooltipContent,
@@ -99,7 +97,7 @@ const BlockDetails = () => {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <div className="mt-4">
+          {/* <div className="mt-4">
             <h4 className="font-semibold mb-2">
               How is the block hash calculated?
             </h4>
@@ -116,7 +114,7 @@ const BlockDetails = () => {
               f ( 0 + &quot;0&quot; + 1508270000000 + &quot;Genesis Block&quot;
               + 604 )
             </pre>
-          </div>
+          </div> */}
         </div>
       )}
     </div>
