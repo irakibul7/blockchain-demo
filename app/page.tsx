@@ -119,7 +119,9 @@ export default function Home() {
 
   return (
     <div className="container mx-auto px-4">
-      <h1 className="text-2xl font-bold text-center m-8">Blockchain Demo</h1>
+      <h1 className="text-3xl md:text-4xl font-bold text-center m-8">
+        Blockchain Demo
+      </h1>
 
       <div className="grid md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
