@@ -1,3 +1,4 @@
+import { TwitterLogoIcon } from "@radix-ui/react-icons";
 import { GithubIcon, LinkedinIcon } from "lucide-react";
 
 export default function Footer() {
@@ -13,7 +14,6 @@ export default function Footer() {
               href="https://github.com/irakibul7"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary-foreground hover:text-primary-foreground/80 transition-colors"
               aria-label="GitHub Profile"
             >
               <GithubIcon className="h-5 w-5" />
@@ -22,10 +22,17 @@ export default function Footer() {
               href="https://www.linkedin.com/in/rakibulislam39/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary-foreground hover:text-primary-foreground/80 transition-colors"
               aria-label="LinkedIn Profile"
             >
               <LinkedinIcon className="h-5 w-5" />
+            </a>
+            <a
+              href="https://x.com/rkshuvo007"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn Profile"
+            >
+              <TwitterLogoIcon className="h-5 w-5" />
             </a>
           </div>
         </div>
