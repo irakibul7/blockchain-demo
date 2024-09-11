@@ -85,9 +85,9 @@ const BlockchainTabs = () => {
             <TabsTrigger value="pow" className="px-2">
               Proof of Work
             </TabsTrigger>
-            <TabsTrigger value="51attack" className="px-2">
+            {/* <TabsTrigger value="51attack" className="px-2">
               51% Attack
-            </TabsTrigger>
+            </TabsTrigger> */}
           </TabsList>
         </div>
         <TabsContent value="blockchain">
