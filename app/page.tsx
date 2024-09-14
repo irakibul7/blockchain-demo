@@ -3,6 +3,7 @@ import BlockCard from "@/components/blockCard";
 import BlockchainTabs from "@/components/blockchainTabs";
 import BlockDetails from "@/components/blockDetails";
 import Footer from "@/components/footer";
+import Terminology from "@/components/terminology";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -204,6 +205,9 @@ export default function Home() {
           <BlockchainTabs />
           <div className="space-y-4">
             <BlockDetails />
+          </div>
+          <div className="space-y-4">
+            <Terminology />
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-# Blockchain Illustrator
+# Blockchain Demo
 
 This interactive website provides a visual and hands-on demonstration of how blockchain technology works. It allows users to create blocks, mine them, and observe how they are linked together in a chain. The project also illustrates the immutable nature of blockchain by showing how tampering with a block affects the entire chain.
 
@@ -172,7 +172,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Acknowledgments
 
-- Satoshi Nakamoto for the original blockchain concept
+- Satoshi Nakamoto for the original blockchain concept [Bitcoin Whitepaper](https://bitcoin.org/bitcoin.pdf)
 - The open-source community for continuous inspiration and support
 
 ## Contact
