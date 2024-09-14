@@ -105,7 +105,7 @@ const BlockchainTabs = () => {
         className="mb-8 w-full"
       >
         <div ref={tabsRef} className="overflow-x-auto">
-          <TabsList className="inline-flex w-max border-b border-b-transparent p-1">
+          <TabsList className="hidden md:inline-flex w-max border-b border-b-transparent p-1">
             {tabIds.map((id) => (
               <TabsTrigger key={id} value={id} className="capitalize">
                 {id.replace(/(\d+)/, " $1 ")}
