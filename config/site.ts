@@ -1,9 +1,10 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Blockchain Demo",
+  name: "Blockchain Field Guide",
   description:
-    "This website illustrates how blockchain works. It allows you to create blocks, mine them, and see how they are linked together. It also shows how tampering with a block affects the chain.",
+    "A hands-on blockchain simulator and sourced glossary for learning how hashes, proof of work, and linked blocks behave.",
+  url: "https://blockchain-demo.therakibul.me",
   links: {
     twitter: "https://twitter.com/rkshuvo007",
     github: "https://github.com/irakibul7",
