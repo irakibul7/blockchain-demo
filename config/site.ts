@@ -7,7 +7,9 @@ export const siteConfig = {
   url: "https://blockchain-demo.therakibul.me",
   links: {
     twitter: "https://twitter.com/rkshuvo007",
-    github: "https://github.com/irakibul7",
+    github: "https://github.com/irakibul7/blockchain-demo",
+    feedback:
+      "https://github.com/irakibul7/blockchain-demo/issues/new?labels=feedback&title=Feedback%3A%20",
     instagram: "https://www.instagram.com/rakibulislams1/",
     linkedin: "https://www.linkedin.com/in/rakibulislam39/",
   },
