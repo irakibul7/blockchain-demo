@@ -972,6 +972,17 @@ h1 {
   margin: 0;
 }
 
+.site-footer nav {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.site-footer a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
 .search-backdrop {
   position: fixed;
   inset: 0;

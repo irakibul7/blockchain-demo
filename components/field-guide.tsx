@@ -33,6 +33,7 @@ import {
   glossaryTerms,
   searchGlossary,
 } from "@/lib/glossary";
+import { siteConfig } from "@/config/site";
 
 type FieldGuideProps = {
   initialTermId?: string;
@@ -392,7 +393,10 @@ export function FieldGuide({ initialTermId }: FieldGuideProps) {
 
         <footer className="site-footer">
           <p>Blockchain Field Guide · A simplified educational simulator</p>
-          <a href="https://github.com/irakibul7/blockchain-demo" target="_blank" rel="noreferrer">View source</a>
+          <nav aria-label="Project links">
+            <a href={siteConfig.links.github} target="_blank" rel="noreferrer">GitHub</a>
+            <a href={siteConfig.links.feedback} target="_blank" rel="noreferrer">Send feedback</a>
+          </nav>
         </footer>
       </main>
 

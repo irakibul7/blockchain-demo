@@ -22,6 +22,16 @@ const nistHash: GlossarySource = {
   url: "https://csrc.nist.gov/pubs/fips/180-4/upd1/final",
 };
 
+const nistSignature: GlossarySource = {
+  label: "NIST FIPS 186-5 — Digital Signature Standard",
+  url: "https://csrc.nist.gov/pubs/fips/186-5/final",
+};
+
+const bitcoinBlockReference: GlossarySource = {
+  label: "Bitcoin Developer Reference — Block chain",
+  url: "https://developer.bitcoin.org/reference/block_chain.html",
+};
+
 const ethereumBlocks: GlossarySource = {
   label: "Ethereum.org — Blocks",
   url: "https://ethereum.org/developers/docs/blocks/",
@@ -92,7 +102,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     "The first block in a chain, created without a normal previous block reference.",
     "The genesis block establishes the starting point from which later blocks derive their history. Its parameters are defined by the protocol or the local experiment. In this simulator its previous hash is represented by zero, while real networks define a specific genesis block and initial state.",
     ["block", "blockchain", "previous-hash"],
-    [bitcoinPaper],
+    [bitcoinPaper, bitcoinBlockReference],
     ["block zero"],
   ),
   term(
@@ -112,7 +122,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     "A standardized cryptographic hash algorithm that produces a 256-bit message digest.",
     "SHA-256 is one member of the Secure Hash Algorithm 2 family specified by NIST. This field guide uses it once over a simple serialized block for teaching. Bitcoin's actual block-header proof-of-work applies SHA-256 twice and compares the numeric result with a target, so the simulator is intentionally simplified.",
     ["hash", "proof-of-work", "difficulty"],
-    [nistHash, bitcoinPaper],
+    [nistHash, bitcoinPaper, bitcoinBlockReference],
   ),
   term(
     "previous-hash",
@@ -131,7 +141,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     "A value miners vary to produce different candidate hashes for the same block data.",
     "In this simulator the nonce starts at zero and increments until the SHA-256 digest begins with the required number of zero characters. A real protocol defines exactly which header fields miners can change and evaluates a numeric target rather than a text prefix, but the repeated-trial principle is the same.",
     ["mining", "difficulty", "proof-of-work", "hash"],
-    [bitcoinPaper],
+    [bitcoinPaper, bitcoinBlockReference],
   ),
   term(
     "difficulty",
@@ -140,7 +150,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     "A measure related to how hard it is to find a proof-of-work hash that satisfies the network target.",
     "A stricter target leaves fewer acceptable hashes, so miners need more attempts on average. Networks such as Bitcoin adjust the target over time to regulate block production. This demo fixes difficulty at three leading hexadecimal zeros so mining finishes quickly enough for a browser lesson.",
     ["proof-of-work", "mining", "nonce", "hash"],
-    [bitcoinPaper],
+    [bitcoinPaper, bitcoinBlockReference],
     ["target", "mining difficulty"],
   ),
   term(
@@ -150,7 +160,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     "A mechanism that makes producing an acceptable block computationally costly while keeping verification cheap.",
     "A miner repeatedly hashes candidate block headers until one falls below the required target. Other nodes can verify the result with a small amount of work. In a chain, altering history requires repeating proof-of-work for the changed block and its descendants, then competing with the work of the accepted network chain.",
     ["mining", "difficulty", "nonce", "chain-selection"],
-    [bitcoinPaper],
+    [bitcoinPaper, bitcoinBlockReference],
     ["PoW"],
   ),
   term(
@@ -160,7 +170,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     "The process of constructing candidate blocks and searching for proof-of-work that satisfies the target.",
     "Mining is more than guessing a nonce in a real cryptocurrency network: miners also select transactions, construct a candidate block, validate rules, and propagate a successful block. The field guide isolates the nonce-search step so learners can see attempts, the resulting hash, and the cost of repairing descendants.",
     ["proof-of-work", "nonce", "difficulty", "block"],
-    [bitcoinPaper],
+    [bitcoinPaper, bitcoinBlockReference],
   ),
   term(
     "chain-validity",
@@ -169,7 +179,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     "The result of checking every block's contents, proof, and link against the chain's rules.",
     "This simulator calls a block valid when its stored hash matches its current fields, its hash meets the teaching difficulty, and its previous hash matches the actual predecessor. Real nodes enforce many additional consensus and transaction rules. A locally consistent chain is therefore not automatically accepted by any real network.",
     ["blockchain", "previous-hash", "consensus", "proof-of-work"],
-    [bitcoinPaper],
+    [bitcoinPaper, bitcoinBlockReference],
     ["validation"],
   ),
   term(
@@ -189,7 +199,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     "A computer running protocol software that exchanges, verifies, or stores blockchain data.",
     "Nodes have different roles and capabilities. A validating node independently checks blocks and transactions against consensus rules, while lightweight clients may rely on compact proofs or other nodes for some data. The browser field guide has no peers, so it should not be mistaken for a node on a public network.",
     ["peer-to-peer-network", "consensus", "transaction", "block"],
-    [bitcoinPaper],
+    [bitcoinPaper, bitcoinBlockReference],
   ),
   term(
     "peer-to-peer-network",
@@ -198,7 +208,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     "A network in which participants exchange blocks and transactions directly rather than through one central server.",
     "In Bitcoin's design, transactions and newly found blocks are broadcast among nodes. Peer-to-peer communication helps the network propagate a shared view without a single central publisher, but it does not eliminate protocol rules, unequal connectivity, operational concentration, or the need to handle conflicting messages.",
     ["node", "consensus", "fork", "transaction"],
-    [bitcoinPaper],
+    [bitcoinPaper, bitcoinBlockReference],
     ["P2P"],
   ),
   term(
@@ -208,7 +218,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     "The rules and process nodes use to agree on which state and history they will accept.",
     "Consensus combines validation rules with a method for resolving competing histories. Proof-of-work is one ingredient in Bitcoin's consensus, not a synonym for every blockchain consensus system. This local simulator validates one chain in one browser and therefore does not demonstrate distributed agreement.",
     ["node", "proof-of-work", "fork", "chain-selection"],
-    [bitcoinPaper],
+    [bitcoinPaper, bitcoinBlockReference],
   ),
   term(
     "fork",
@@ -226,7 +236,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     "The consensus rule nodes apply when more than one candidate blockchain history exists.",
     "Bitcoin nodes select the valid chain with the most accumulated proof-of-work, often described informally as the longest chain. Raw block count alone is not the precise rule. Chain selection lets independently operating nodes converge after temporary forks when one history accumulates more accepted work.",
     ["fork", "proof-of-work", "consensus", "51-percent-attack"],
-    [bitcoinPaper],
+    [bitcoinPaper, bitcoinBlockReference],
     ["longest chain", "heaviest chain"],
   ),
   term(
@@ -236,15 +246,15 @@ export const glossaryTerms: GlossaryTerm[] = [
     "A majority-hash-power attack in which one actor can outpace honest proof-of-work miners and reorganize recent history.",
     "An attacker controlling most active hash power can build an alternative chain faster than the honest network, potentially reversing the attacker's own recent payments or censoring transactions. It does not reveal private keys or allow arbitrary signatures, and its feasibility and impact depend on the network and duration.",
     ["proof-of-work", "chain-selection", "consensus", "digital-signature"],
-    [bitcoinPaper],
+    [bitcoinPaper, bitcoinBlockReference],
     ["majority attack"],
   ),
   term(
     "transaction",
     "Transaction",
     "Ownership & Applications",
-    "A signed instruction that proposes a change to blockchain state under the protocol's rules.",
-    "A transaction can transfer value, call a smart contract, or perform another network-defined action. Nodes validate its signature, authorization, format, and state-dependent conditions before accepting it. A transaction being broadcast is not the same as its final inclusion and confirmation in an accepted block.",
+    "A protocol-formatted instruction, usually authorized by a digital signature, that proposes a state change.",
+    "A transaction can transfer value, call a smart contract, or perform another network-defined action. Nodes validate its authorization, format, and state-dependent conditions, including a signature when the protocol requires one. Broadcasting a transaction is not the same as having it included and confirmed in an accepted block.",
     ["digital-signature", "block", "wallet", "smart-contract"],
     [ethereumTransactions],
   ),
@@ -252,7 +262,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     "wallet",
     "Wallet",
     "Ownership & Applications",
-    "Software or hardware that manages keys and helps a user create and sign blockchain transactions.",
+    "An interface, application, or device that manages keys and helps a user interact with blockchain accounts.",
     "A wallet does not normally store coins as files inside the device; the network records state while the wallet controls the credentials used to authorize actions. Wallet designs range from self-custody tools to services where another party holds keys, so users need to understand who can sign and recover access.",
     ["private-key", "public-key", "digital-signature", "transaction"],
     [ethereumAccounts],
@@ -261,7 +271,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     "public-key",
     "Public key",
     "Ownership & Applications",
-    "The shareable half of an asymmetric key pair, used to verify signatures or derive identifiers.",
+    "The non-secret value in an asymmetric key pair, used to verify signatures or derive identifiers.",
     "A public key can be distributed without revealing the private key. Depending on the protocol, addresses are derived from public keys rather than being identical to them. Others use the public key and signature to verify that a transaction was authorized by the corresponding private key.",
     ["private-key", "digital-signature", "wallet", "transaction"],
     [ethereumAccounts],
@@ -280,10 +290,10 @@ export const glossaryTerms: GlossaryTerm[] = [
     "digital-signature",
     "Digital signature",
     "Ownership & Applications",
-    "Cryptographic evidence that a holder of a private key authorized a specific message.",
+    "A cryptographic value used to verify that the corresponding private key signed a specific message.",
     "A signing algorithm combines a private key with a message digest to create a signature. Verifiers use the corresponding public key to check it. Signatures provide authorization and integrity evidence, but application rules still determine whether a signed transaction is valid, timely, and permitted.",
     ["private-key", "public-key", "transaction", "hash"],
-    [ethereumTransactions, ethereumAccounts],
+    [ethereumTransactions, ethereumAccounts, nistSignature],
     ["signature"],
   ),
   term(
