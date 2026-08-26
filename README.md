@@ -1,182 +1,124 @@
-# Blockchain Demo
+# Blockchain Field Guide
 
-This interactive website provides a visual and hands-on demonstration of how blockchain technology works. It allows users to create blocks, mine them, and observe how they are linked together in a chain. The project also illustrates the immutable nature of blockchain by showing how tampering with a block affects the entire chain.
+A hands-on blockchain simulator and sourced glossary for learning how hashes, proof of work, and linked blocks behave.
+
+[Open the live field guide](https://blockchain-demo.therakibul.me/) · [Send feedback](https://github.com/irakibul7/blockchain-demo/issues/new?labels=feedback&title=Feedback%3A%20)
+
+![Blockchain Field Guide social preview](./app/opengraph-image.png)
+
+## What it teaches
+
+The field guide turns blockchain mechanics into one continuous experiment:
+
+1. Edit the data stored in a block.
+2. See its SHA-256 hash change immediately.
+3. Observe how the change breaks proof of work and later block references.
+4. Re-mine the affected block and its descendants to repair the local chain.
+5. Read the related glossary entries without leaving the learning flow.
+
+This is a simplified, local educational simulator, not a cryptocurrency network. It uses one SHA-256 pass over a teaching-oriented block format and a leading-hex-zero target. Production protocols define their own serialization, targets, validation rules, networking, and consensus behavior.
 
 ## Features
 
-- **Block Creation**: Users can create new blocks with custom data.
-- **Mining Simulation**: Experience the process of mining blocks and see how it affects the blockchain.
-- **Chain Visualization**: A clear, visual representation of how blocks are linked together.
-- **Tamper Demonstration**: Interact with the chain to see how altering data in one block affects subsequent blocks.
-- **Educational Tool**: Perfect for learning and teaching blockchain concepts.
+- Interactive four-block chain with editable data
+- Live hash comparison and chain-validity feedback
+- Proof-of-work mining with visible nonce attempts
+- Add-block and reset controls
+- 24 beginner-friendly blockchain glossary terms
+- Searchable glossary with `⌘K` and `Ctrl+K` shortcuts
+- Shareable, crawlable pages for every term
+- Primary technical sources and review dates beside definitions
+- Responsive layout, keyboard focus styles, and semantic landmarks
+- Canonical metadata, Open Graph and X cards, sitemap, robots.txt, and Schema.org `DefinedTerm` data
+- Custom favicon and Apple touch icon
 
-## Getting Started
+## Glossary
 
-### Installation
+The glossary covers four connected groups:
 
-1. Clone the repository:
+- **Foundations:** blockchain, blocks, hashes, SHA-256, genesis blocks, and previous hashes
+- **Proof of work:** nonces, difficulty, mining, chain validity, and tamper evidence
+- **Networks and consensus:** nodes, peer-to-peer networks, forks, chain selection, and 51% attacks
+- **Transactions and ownership:** transactions, wallets, public and private keys, digital signatures, and smart contracts
 
-   ```
-   git clone https://github.com/irakibul7/blockchain-demo
-   ```
+Definitions were reviewed against primary or protocol-maintained material from the [Bitcoin whitepaper](https://bitcoin.org/bitcoin.pdf), [Bitcoin Developer Reference](https://developer.bitcoin.org/reference/block_chain.html), [NIST Secure Hash Standard](https://csrc.nist.gov/pubs/fips/180-4/upd1/final), [NIST Digital Signature Standard](https://csrc.nist.gov/pubs/fips/186-5/final), and [Ethereum developer documentation](https://ethereum.org/developers/docs/). The complete editorial record is in [content-audit.md](./content-audit.md).
 
-2. Navigate to the project directory:
+## Technology
 
-   ```
-   cd blockchain-demo
-   ```
-
-3. Install dependencies:
-
-   ```
-   npm install
-   ```
-
-4. Start the development server:
-
-   ```
-   npm run dev
-   ```
-
-5. Open your browser and visit `http://localhost:3000` to view the application.
-
-## Usage
-
-1. **Tampering Demonstration**:
-
-   - Select any block in the chain.
-   - Modify the data in the block.
-   - Observe how this change affects the current block's hash and invalidates all subsequent blocks.
-
-2. **Mining Simulation**:
-
-   - Click the "Mine Blocks" button to simulate the mining process.
-   - The system will automatically adjust the nonce value to find a valid hash.
-   - Once the hash meets the difficulty criteria, the block is added to the chain.`
-
-3. **Creating a Block**:
-
-   - Enter data into the provided input field.
-   - Click the "Create Block" button to add a new block to the chain.
-
-## Technologies Used
-
-- Next.js
-- SHA-256 Hashing Algorithm
+- Next.js 16 App Router
+- React 19
 - TypeScript
+- CryptoJS SHA-256
+- Vitest
+- ESLint
+- Inter and IBM Plex Mono
 
-## Understanding the Technology
+The application is statically generated. The homepage, glossary term pages, sitemap, robots file, and social images can be deployed on any platform that supports a Next.js production build.
 
-### Blockchain Basics
+## Local development
 
-A blockchain is a distributed ledger that records transactions across many computers. Each record in the blockchain is called a block, and each block is linked to the previous one, forming a chain. This structure allows for secure, transparent, and tamper-evident record-keeping.
+### Requirements
 
-### Block Structure
+- Node.js 20.9 or newer
+- npm
 
-In this demo, each block contains:
+### Setup
 
-- Index: The position of the block in the chain
-- Timestamp: When the block was created
-- Data: The information stored in the block
-- Previous Hash: The hash of the previous block
-- Hash: The unique identifier of the current block
-- Nonce: A number used in the mining process
-
-### SHA-256 Hashing Algorithm
-
-The SHA-256 (Secure Hash Algorithm 256-bit) is a cryptographic hash function that generates a unique, fixed-size 256-bit (32-byte) hash. This project uses SHA-256 to calculate the hash of each block. Here's how it works:
-
-1. The block's contents (index, timestamp, data, previous hash, and nonce) are combined into a single string.
-2. This string is passed through the SHA-256 algorithm.
-3. The algorithm produces a fixed-size output (the hash), regardless of the input size.
-4. Any change in the input, no matter how small, results in a completely different hash.
-
-For example:
-
-```javascript
-import sha256 from "crypto-js/sha256";
-
-function calculateHash(index, timestamp, data, previousHash, nonce) {
-  const blockString = index + timestamp + data + previousHash + nonce;
-  return sha256(blockString).toString();
-}
+```bash
+git clone git@github.com:irakibul7/blockchain-demo.git
+cd blockchain-demo
+npm install
+npm run dev
 ```
 
-### Mining Process
+Open [http://localhost:3000](http://localhost:3000).
 
-Mining is the process of adding new blocks to the blockchain. To mine a block, miners must find a hash that meets certain criteria. In this demo, the criteria are based on the difficulty level, which determines the number of leading zeros required in the hash.
+## Commands
 
-The mining process involves:
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the local development server |
+| `npm run build` | Create an optimized production build |
+| `npm run start` | Serve the production build |
+| `npm run typecheck` | Run TypeScript without emitting files |
+| `npm run lint` | Run ESLint |
+| `npm run test` | Run the Vitest test suite |
+| `npm run check` | Run type checking, linting, and tests |
 
-1. Incrementing the nonce value.
-2. Calculating the hash of the block.
-3. Checking if the hash meets the difficulty criteria.
-4. Repeating the process until a valid hash is found.
+## Project structure
 
-```javascript
-function mineBlock(index, timestamp, data, previousHash, difficulty) {
-  let nonce = 0;
-  let hash = calculateHash(index, timestamp, data, previousHash, nonce);
-
-  while (!isValidHash(hash, difficulty)) {
-    nonce++;
-    hash = calculateHash(index, timestamp, data, previousHash, nonce);
-  }
-
-  return { nonce, hash };
-}
+```text
+app/                     Routes, metadata, sitemap, robots, and social images
+components/              Interactive field-guide interface
+config/                  Site name, canonical domain, and project links
+lib/blockchain.ts        Hashing, mining, and chain-validation logic
+lib/glossary.ts          Reviewed glossary content and source records
+lib/structured-data.ts   Schema.org glossary entities
+public/                  Favicons and Apple touch icon
+content-audit.md         Definition proofreading and fact-check record
 ```
 
-### Validating the Hash
+## Quality checks
 
-The validity of a hash is determined by the number of leading zeros it contains. The difficulty level specifies the required number of zeros. For example, a difficulty of 3 means the hash must start with three zeros.
+The project includes unit tests for blockchain behavior, glossary integrity, and structured data. Before opening a pull request, run:
 
-```javascript
-function isValidHash(hash, difficulty) {
-  const prefix = "0".repeat(difficulty);
-  return hash.startsWith(prefix);
-}
+```bash
+npm run check
+npm run build
 ```
-
-### Tamper Detection
-
-Blockchain technology ensures the integrity of the data by linking blocks together using cryptographic hashes. If the data in a block is altered, the hash of that block changes, which in turn affects the hash of all subsequent blocks. This tamper-evident property makes it easy to detect any unauthorized changes to the blockchain.
-
-```javascript
-function isChainValid(chain) {
-  for (let i = 1; i < chain.length; i++) {
-    const currentBlock = chain[i];
-    const previousBlock = chain[i - 1];
-
-    if (currentBlock.hash !== calculateHashForBlock(currentBlock)) {
-      return false;
-    }
-
-    if (currentBlock.previousHash !== previousBlock.hash) {
-      return false;
-    }
-  }
-
-  return true;
-}
-```
-
-## Roadmap
-
-- Enhance the UI/UX for a more engaging user experience.
-- Add more interactive features to demonstrate advanced blockchain concepts.
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Issues and pull requests are welcome. For content corrections, include a primary or protocol-maintained source and identify the glossary term being changed.
 
-## Acknowledgments
+## Author
 
-- Satoshi Nakamoto for the original blockchain concept [Bitcoin Whitepaper](https://bitcoin.org/bitcoin.pdf)
-- The open-source community for continuous inspiration and support
+Built by [Rakibul Islam](https://therakibul.me/).
 
-## Contact
+- [GitHub](https://github.com/irakibul7)
+- [X](https://x.com/rkshuvo007)
+- [LinkedIn](https://www.linkedin.com/in/rakibulislam39/)
 
-Rakibul Islam - [@rkshuvo007](https://x.com/rkshuvo007) - irakibul568@gmail.com
+## License
 
-Project Link: [blockchain-demo.therakibul.me](https://blockchain-demo.therakibul.me/)
+No license has been added yet. All rights are reserved by the repository owner unless a license file is introduced.
