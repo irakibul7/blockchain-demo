@@ -2,12 +2,12 @@ import { describe, expect, it } from "vitest";
 import { glossaryById, glossaryTerms, searchGlossary } from "./glossary";
 
 describe("blockchain glossary", () => {
-  it("contains 24 reviewed and sourced terms", () => {
-    expect(glossaryTerms).toHaveLength(24);
-    expect(new Set(glossaryTerms.map((item) => item.id)).size).toBe(24);
+  it("contains 28 reviewed and sourced terms", () => {
+    expect(glossaryTerms).toHaveLength(28);
+    expect(new Set(glossaryTerms.map((item) => item.id)).size).toBe(28);
 
     for (const item of glossaryTerms) {
-      expect(item.reviewedAt).toBe("2026-08-26");
+      expect(["2026-08-26", "2026-09-07"]).toContain(item.reviewedAt);
       expect(item.explanation.length).toBeGreaterThan(180);
       expect(item.sources.length).toBeGreaterThan(0);
       expect(item.sources[0].url).toMatch(/^https:\/\//);
