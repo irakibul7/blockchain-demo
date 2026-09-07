@@ -9,7 +9,7 @@ export type GlossaryTerm = {
   aliases: string[];
   related: string[];
   sources: GlossarySource[];
-  reviewedAt: "2026-08-26";
+  reviewedAt: string;
 };
 
 const bitcoinPaper: GlossarySource = {
@@ -76,6 +76,86 @@ function term(
 }
 
 export const glossaryTerms: GlossaryTerm[] = [
+  {
+    "id": "confirmations",
+    "name": "Confirmations",
+    "section": "Networks & Consensus",
+    "summary": "How deeply a transaction’s block is buried in the currently selected chain.",
+    "explanation": "In the usual Bitcoin convention, inclusion counts as one confirmation and each following active-chain block adds one. The count is meaningful only while the containing block remains in the selected history. A reorganization can reduce it or remove the inclusion. A confirmation threshold is an application risk policy, not a universal guarantee of settlement.",
+    "aliases": [],
+    "related": [
+      "transaction",
+      "reorganization",
+      "finality"
+    ],
+    "sources": [
+      {
+        "label": "Primary documentation: Confirmations",
+        "url": "https://developer.bitcoin.org/devguide/payment_processing.html"
+      }
+    ],
+    "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "finality",
+    "name": "Finality",
+    "section": "Networks & Consensus",
+    "summary": "A protocol-dependent assurance about whether accepted history can be replaced.",
+    "explanation": "Finality is not a synonym for an HTTP success response or one block of inclusion. Bitcoin provides probabilistic settlement confidence through accumulated work. Ethereum proof of stake uses checkpoint finalization with supermajority stake votes and economic penalties under its safety assumptions. Finalization may stall; an application must observe the relevant network state rather than assume a timer guarantees it.",
+    "aliases": [],
+    "related": [
+      "consensus",
+      "confirmations",
+      "reorganization"
+    ],
+    "sources": [
+      {
+        "label": "Primary documentation: Finality",
+        "url": "https://ethereum.org/developers/docs/consensus-mechanisms/pos/"
+      }
+    ],
+    "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "reorganization",
+    "name": "Reorganization",
+    "section": "Networks & Consensus",
+    "summary": "A change to the selected chain that replaces a previously observed suffix.",
+    "explanation": "When fork choice selects a different valid history, blocks previously treated as canonical can leave the active chain. A transaction in those blocks may be included elsewhere, return to pending, or conflict with the new history. Applications should retain inclusion block hashes and revisit unsettled observations. This local simulator demonstrates broken ancestry but does not implement competing branches or network reorganizations.",
+    "aliases": [],
+    "related": [
+      "fork",
+      "chain-selection",
+      "confirmations"
+    ],
+    "sources": [
+      {
+        "label": "Primary documentation: Reorganization",
+        "url": "https://ethereum.org/developers/docs/consensus-mechanisms/pos/gasper/"
+      }
+    ],
+    "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "idempotency",
+    "name": "Idempotency",
+    "section": "Networks & Consensus",
+    "summary": "Repeated attempts at the same logical operation preserve a single intended effect.",
+    "explanation": "For a payment API, retries should reuse one durable operation identity bound to the same normalized parameters. Reusing that identity with a different payment must be rejected. Blockchain spending rules do not automatically deduplicate an order refund sent twice as two different valid transfers. Application idempotency requires durable storage, concurrency control, and reconciliation after ambiguous submission outcomes.",
+    "aliases": [],
+    "related": [
+      "transaction",
+      "nonce",
+      "confirmations"
+    ],
+    "sources": [
+      {
+        "label": "Primary documentation: Idempotency",
+        "url": "https://docs.stripe.com/api/idempotent_requests"
+      }
+    ],
+    "reviewedAt": "2026-09-07"
+  },
   term(
     "blockchain",
     "Blockchain",

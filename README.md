@@ -24,12 +24,15 @@ This is a simplified, local educational simulator, not a cryptocurrency network.
 - Live hash comparison and chain-validity feedback
 - Proof-of-work mining with visible nonce attempts
 - Add-block and reset controls
-- 24 beginner-friendly blockchain glossary terms
+- Four guided experiments with instructions, predictions, explanations, and simulator limits
+- Three substantial articles about tampering, transaction status, and duplicate-payment prevention
+- Two downloadable, runnable offline Node.js examples
+- 28 beginner-friendly blockchain glossary terms
 - Searchable glossary with `⌘K` and `Ctrl+K` shortcuts
 - Shareable, crawlable pages for every term
 - Primary technical sources and review dates beside definitions
 - Responsive layout, keyboard focus styles, and semantic landmarks
-- Canonical metadata, Open Graph and X cards, sitemap, robots.txt, and Schema.org `DefinedTerm` data
+- Canonical metadata, Open Graph and X cards, sitemap, robots.txt, and Schema.org `DefinedTerm`, `Article`, and author data
 - Custom favicon and Apple touch icon
 
 ## Glossary
@@ -53,7 +56,7 @@ Definitions were reviewed against primary or protocol-maintained material from t
 - ESLint
 - Inter and IBM Plex Mono
 
-The application is statically generated. The homepage, glossary term pages, sitemap, robots file, and social images can be deployed on any platform that supports a Next.js production build.
+The application is statically generated. The homepage, three article pages, glossary term pages, sitemap, robots file, and social images can be deployed on any platform that supports a Next.js production build.
 
 ## Local development
 
@@ -84,6 +87,7 @@ Open [http://localhost:3000](http://localhost:3000).
 | `npm run lint` | Run ESLint |
 | `npm run test` | Run the Vitest test suite |
 | `npm run check` | Run type checking, linting, and tests |
+| `npm run check:production` | Verify metadata, crawlable content, sitemap and local links against port 3100 |
 
 ## Project structure
 
@@ -93,6 +97,10 @@ components/              Interactive field-guide interface
 config/                  Site name, canonical domain, and project links
 lib/blockchain.ts        Hashing, mining, and chain-validation logic
 lib/glossary.ts          Reviewed glossary content and source records
+lib/learning.ts          Guided lessons, source registry, author and review date
+lib/articles.ts          Article manifest and original article content
+public/examples/        Offline runnable examples (Node.js 20+)
+scripts/                Production HTML and link checks
 lib/structured-data.ts   Schema.org glossary entities
 public/                  Favicons and Apple touch icon
 content-audit.md         Definition proofreading and fact-check record
@@ -105,6 +113,19 @@ The project includes unit tests for blockchain behavior, glossary integrity, and
 ```bash
 npm run check
 npm run build
+```
+
+## Educational expansion (September 7, 2026)
+
+See [docs/educational-expansion.md](./docs/educational-expansion.md) for the review record, source-to-claim notes, validation results, and limitations. This work builds on `codex/editorial-rebuild`, the branch matching the published Field Guide; `main` still contains the older demo.
+
+After building, run `npm run start -- --hostname 127.0.0.1 --port 3100`, then `npm run check:production` in another terminal. Set `CHECK_BASE_URL` to test another local port. The check uses HTTP HTML responses without client JavaScript.
+
+Run the downloadable examples directly:
+
+```sh
+node public/examples/hash-change.mjs
+node public/examples/retry-payments.mjs
 ```
 
 ## Contributing

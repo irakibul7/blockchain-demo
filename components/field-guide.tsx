@@ -14,7 +14,7 @@ import {
   XCircle,
 } from "@phosphor-icons/react";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import {
   appendBlock,
   createInitialChain,
@@ -37,6 +37,8 @@ import { siteConfig } from "@/config/site";
 
 type FieldGuideProps = {
   initialTermId?: string;
+  children: ReactNode;
+  articleLinks: { slug: string; title: string; terms: string[] }[];
 };
 
 const initialValidChain = createInitialChain();
@@ -119,7 +121,7 @@ function SearchDialog({ open, onClose }: { open: boolean; onClose: () => void })
   );
 }
 
-export function FieldGuide({ initialTermId }: FieldGuideProps) {
+export function FieldGuide({ initialTermId, children, articleLinks }: FieldGuideProps) {
   const [chain, setChain] = useState<BlockRecord[]>(createTeachingChain);
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -216,18 +218,20 @@ export function FieldGuide({ initialTermId }: FieldGuideProps) {
       <a href="#main-content" className="skip-link">Skip to the experiment</a>
 
       <header className="mobile-header">
-        <Link href="/" className="mobile-brand">Blockchain Field Guide</Link>
+        <Link href="/" className="mobile-brand" aria-label="Blockchain Field Guide home" onClick={() => setMenuOpen(false)}><span>Blockchain</span><span>Field Guide</span></Link>
         <div>
-          <button className="icon-button" onClick={() => setSearchOpen(true)} aria-label="Search glossary">
+          <button className="icon-button" onClick={() => { setMenuOpen(false); setSearchOpen(true); }} aria-label="Search glossary">
             <MagnifyingGlass size={20} />
           </button>
-          <button className="icon-button" onClick={() => setMenuOpen((value) => !value)} aria-label="Open navigation" aria-expanded={menuOpen}>
-            <List size={21} />
+          <button className="icon-button" onClick={() => setMenuOpen((value) => !value)} aria-label={menuOpen ? "Close navigation" : "Open navigation"} aria-expanded={menuOpen} aria-controls="guide-navigation">
+            {menuOpen ? <X size={21} /> : <List size={21} />}
           </button>
         </div>
       </header>
 
-      <aside className={`sidebar ${menuOpen ? "sidebar--open" : ""}`} aria-label="Field guide navigation">
+      {menuOpen && <button className="navigation-backdrop" aria-label="Close navigation overlay" onClick={() => setMenuOpen(false)} />}
+
+      <aside id="guide-navigation" className={`sidebar ${menuOpen ? "sidebar--open" : ""}`} aria-label="Field guide navigation">
         <Link href="/" className="brand" onClick={() => setMenuOpen(false)}>
           <span>Blockchain</span>
           <span>Field Guide</span>
@@ -239,10 +243,11 @@ export function FieldGuide({ initialTermId }: FieldGuideProps) {
         </button>
         <nav>
           <p className="nav-label">Experiments</p>
-          <a href="#glossary-hash" onClick={() => setMenuOpen(false)}><span>01</span>Hashing<i /></a>
-          <a href="#chain-timeline" onClick={() => setMenuOpen(false)}><span>02</span>Chaining<i /></a>
-          <a href="#tampering" className="active" onClick={() => setMenuOpen(false)}><span>03</span>Tampering<i /></a>
-          <a href="#proof-of-work-panel" onClick={() => setMenuOpen(false)}><span>04</span>Proof of work<i /></a>
+          <a href="#exercise-hashing" onClick={() => setMenuOpen(false)}><span>01</span>Hashing<i /></a>
+          <a href="#exercise-chaining" onClick={() => setMenuOpen(false)}><span>02</span>Chaining<i /></a>
+          <a href="#exercise-transaction-tampering" onClick={() => setMenuOpen(false)}><span>03</span>Tampering<i /></a>
+          <a href="#exercise-proof-of-work" onClick={() => setMenuOpen(false)}><span>04</span>Proof of work<i /></a>
+          <a href="#articles" onClick={() => setMenuOpen(false)}>Articles<i /></a>
         </nav>
         <section className="sidebar-glossary">
           <p className="nav-label">Glossary</p>
@@ -260,6 +265,7 @@ export function FieldGuide({ initialTermId }: FieldGuideProps) {
           <div className="eyebrow-row"><p className="eyebrow">03 &nbsp; Tampering</p><span>{chain.length} blocks · difficulty {DEFAULT_DIFFICULTY}</span></div>
           <h1 id="experiment-title">See one change travel through the chain</h1>
           <p className="lede">Edit a block&apos;s data and see how its hash changes — and why later blocks can no longer prove one continuous history.</p>
+          <p className="review-line">A guide by <a href="https://therakibul.me/" rel="author">Rakibul Islam</a> · <a href="#learning-title">Start a guided exercise</a> · <a href="#articles">Read the articles</a></p>
           <div className="simulator-note"><Info size={18} /><span>This is a simplified, local simulator — not a real blockchain network.</span></div>
 
           <section id="chain-timeline" className="timeline-section" aria-labelledby="timeline-title">
@@ -339,7 +345,7 @@ export function FieldGuide({ initialTermId }: FieldGuideProps) {
             {addingBlock && (
               <div className="add-block-form">
                 <label htmlFor="new-block-data">New block data</label>
-                <input id="new-block-data" autoFocus value={newBlockData} onChange={(event) => setNewBlockData(event.target.value)} placeholder="Certificate issued to Alice" />
+                <input id="new-block-data" autoFocus value={newBlockData} onChange={(event) => setNewBlockData(event.target.value)} maxLength={512} disabled={mining} placeholder="Certificate issued to Alice" />
                 <button onClick={handleAddBlock} disabled={!newBlockData.trim() || mining}>Mine and add block</button>
               </div>
             )}
@@ -347,15 +353,21 @@ export function FieldGuide({ initialTermId }: FieldGuideProps) {
 
           <section className="what-happened">
             <h2 className="section-label">What just happened?</h2>
-            <p>Changing block 02 produced a new hash. Its proof-of-work no longer meets the target, and block 03 still points to block 02&apos;s old hash. That broken link leaves the remaining history invalid until the affected blocks are re-mined.</p>
+            <p>{chainValid
+              ? activeBlock.hash === beforeHash
+                ? "The original history is valid. Edit block 02 to compare its new hash with the original commitment."
+                : "The rewritten local chain passes the hash, parent-link, and proof-of-work checks. Re-mining repaired the affected history; it did not authorize a real payment or win agreement from a network."
+              : "The chain is invalid. Check the reason under each block: block 02 may miss the target, block 03 may reference the old parent hash, and later blocks can extend invalid history even when their own checks pass. Re-mine from block 02 to repair the local suffix."}</p>
           </section>
         </section>
+
+        {children}
 
         <section className="glossary-section" aria-labelledby="glossary-title">
           <div className="glossary-intro">
             <p className="eyebrow">Blockchain glossary</p>
             <h2 id="glossary-title">The concepts behind the experiment</h2>
-            <p>Twenty-four reviewed terms, written for beginners and connected to primary technical sources.</p>
+            <p>{glossaryTerms.length} reviewed terms, written for beginners and connected to primary technical sources.</p>
           </div>
           {glossarySections.map((section) => (
             <section key={section} className="glossary-group" aria-labelledby={`section-${section.replaceAll(" ", "-")}`}>
@@ -373,7 +385,7 @@ export function FieldGuide({ initialTermId }: FieldGuideProps) {
                   <div className="term-body">
                     <div><p className="section-label">Definition</p><p>{item.explanation}</p></div>
                     <aside aria-label={`Sources and review date for ${item.name}`}>
-                      <p><span>Reviewed</span><time dateTime={item.reviewedAt}>Aug 26, 2026</time></p>
+                      <p><span>Reviewed</span><time dateTime={item.reviewedAt}>{new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }).format(new Date(item.reviewedAt))}</time></p>
                       <p><span>Sources</span></p>
                       <ul>{item.sources.map((source) => <li key={source.url}><a href={source.url} target="_blank" rel="noreferrer">{source.label}</a></li>)}</ul>
                     </aside>
@@ -385,6 +397,11 @@ export function FieldGuide({ initialTermId }: FieldGuideProps) {
                       return related ? <Link key={relatedId} href={`/term/${relatedId}/`}>{related.name}</Link> : null;
                     })}
                   </nav>
+                  <nav className="related-terms" aria-label={`Reading for ${item.name}`}>
+                    <span>Explore</span>
+                    <a href="#learning-title">Guided exercises</a>
+                    {articleLinks.filter((article) => article.terms.includes(item.id)).map((article) => <Link key={article.slug} href={`/articles/${article.slug}/`}>{article.title}</Link>)}
+                  </nav>
                 </article>
               ))}
             </section>
@@ -392,7 +409,7 @@ export function FieldGuide({ initialTermId }: FieldGuideProps) {
         </section>
 
         <footer className="site-footer">
-          <p>Blockchain Field Guide · A simplified educational simulator</p>
+          <p>Blockchain Field Guide · By <a href="https://therakibul.me/" rel="author">Rakibul Islam</a> · A simplified educational simulator</p>
           <nav aria-label="Project links">
             <a href={siteConfig.links.github} target="_blank" rel="noreferrer">GitHub</a>
             <a href={siteConfig.links.feedback} target="_blank" rel="noreferrer">Send feedback</a>

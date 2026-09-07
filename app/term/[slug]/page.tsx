@@ -1,3 +1,5 @@
+import { LearningContent } from "@/components/learning-content";
+import { articles } from "@/lib/articles";
 import { FieldGuide } from "@/components/field-guide";
 import { siteConfig } from "@/config/site";
 import { glossaryById, glossaryTerms } from "@/lib/glossary";
@@ -46,7 +48,7 @@ export default async function TermPage({ params }: TermPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(createTermJsonLd(term)) }}
       />
-      <FieldGuide initialTermId={slug} />
+      <FieldGuide initialTermId={slug} articleLinks={articles.map(({ slug, title, terms }) => ({ slug, title, terms }))}><LearningContent /></FieldGuide>
     </>
   );
 }
